@@ -125,24 +125,15 @@ button{font-family:inherit;}
 .cnt-total-of{font-size:0.55em;font-weight:500;opacity:0.75;margin-left:1px;}
 
 /* seat map */
-.seat-map-section{max-width:720px;margin:14px auto 0;background:var(--card);border-radius:16px;padding:14px 8px 16px;border:1px solid rgba(168,130,62,0.35);
-  --seat-size:16px;--seat-gap:1.5px;}
+.seat-map-section{max-width:520px;margin:14px auto 0;background:var(--card);border-radius:16px;padding:14px 8px 16px;border:1px solid rgba(168,130,62,0.35);}
 .seat-map-title{text-align:center;font-size:13px;font-weight:700;color:var(--plum);margin-bottom:8px;letter-spacing:1px;font-family:'Gowun Batang',serif;}
-.stage-box-mini{background:#6b6560;color:#fff;border-radius:20px;text-align:center;font-size:10px;font-weight:700;padding:4px 0;letter-spacing:8px;margin:0 auto 12px;width:80%;}
-.zone-scroll{overflow:hidden;display:flex;justify-content:center;}
-.map-inner{display:flex;flex-direction:column;gap:var(--seat-gap);align-items:stretch;}
-.floor-label{font-size:10px;font-weight:700;color:var(--ink3);margin:2px 0 3px;}
-.floor-div{height:1px;background:rgba(80,60,40,0.4);margin:8px 0 6px;}
-.mrow{display:flex;align-items:center;gap:6px;}
-.mrow.gap-after{margin-bottom:8px;}
-.rl{font-size:8px;font-weight:700;color:var(--gold);width:11px;text-align:center;flex-shrink:0;}
-.blk{display:flex;gap:var(--seat-gap);}
-.blk.L{width:calc(4*var(--seat-size) + 3*var(--seat-gap));justify-content:flex-end;}
-.blk.C{width:calc(12*var(--seat-size) + 11*var(--seat-gap));justify-content:center;}
-.blk.R{width:calc(5*var(--seat-size) + 4*var(--seat-gap));justify-content:flex-start;}
-.blk.F2{width:calc(23*var(--seat-size) + 22*var(--seat-gap) + 12px);justify-content:center;}
-.seat{width:var(--seat-size);height:var(--seat-size);font-size:8px;border-radius:3px;font-weight:800;display:flex;align-items:center;justify-content:center;
-  background:#efe4cc;color:#7a6a50;border:1px solid #d8c8a6;flex-shrink:0;}
+.stage-box-mini{background:#6b6560;color:#fff;border-radius:6px;text-align:center;font-size:11px;font-weight:700;padding:5px 0;letter-spacing:4px;margin-bottom:6px;width:100%;font-family:'Gowun Batang',serif;}
+.seat-map-inner{display:block;width:100%;}
+.floor-label{font-size:9px;font-weight:700;color:var(--gold);text-align:left;padding:4px 0 2px;letter-spacing:2px;}
+.floor-divider{border:none;border-top:1px dashed rgba(120,90,50,0.35);margin:4px 0;}
+.row-label{font-weight:700;color:var(--gold);flex-shrink:0;text-align:center;}
+.seat{border-radius:2px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  background:#efe4cc;color:#8a7a60;border:1px solid #d8c8a6;}
 .seat.mk1{background:#b5485a!important;color:#fff!important;border-color:#8a2f40!important;}
 .seat.mk2{background:#3e6aa8!important;color:#fff!important;border-color:#284c80!important;}
 .seat.mk3{background:#d0893a!important;color:#fff!important;border-color:#a0661e!important;}
@@ -201,10 +192,7 @@ button{font-family:inherit;}
   .seat-input{font-size:10.5px;padding:3px 5px;}
   .count-card .cnt-num{font-size:24px;}
   .cnt-total-card .cnt-num{font-size:34px;}
-  .seat-map-section{--seat-size:20px;--seat-gap:1.5px;}
-  .seat{font-size:10px;}
-  .rl{font-size:10px;width:14px;}
-  .gt-wk span{font-size:8px;}
+    .gt-wk span{font-size:8px;}
 }
 .btn-parkyudeok{background:rgba(62,92,138,0.10);color:#3e5c8a;border-color:rgba(62,92,138,0.45);}.btn-parkyudeok.active{background:#3e5c8a;color:#fff;border-color:#3e5c8a;}.badge-parkyudeok{background:rgba(62,92,138,0.13);color:#3e5c8a;border:1px solid rgba(62,92,138,0.5);}.row.nar-parkyudeok{background:rgba(62,92,138,0.06);border-left:3px solid #3e5c8a;}
 .btn-yuseunghyun{background:rgba(90,111,168,0.10);color:#5a6fa8;border-color:rgba(90,111,168,0.45);}.btn-yuseunghyun.active{background:#5a6fa8;color:#fff;border-color:#5a6fa8;}.badge-yuseunghyun{background:rgba(90,111,168,0.13);color:#5a6fa8;border:1px solid rgba(90,111,168,0.5);}.row.nar-yuseunghyun{background:rgba(90,111,168,0.06);border-left:3px solid #5a6fa8;}
@@ -306,7 +294,8 @@ button{font-family:inherit;}
 
 <div class="seat-map-section">
   <div class="seat-map-title">내 좌석 정산</div>
-  <div id="seatMapInner"></div>
+  <div class="stage-box-mini">무 대</div>
+  <div class="seat-map-inner" id="seatMapInner"></div>
   <div class="seat-legend" id="seatLegend"><span style="font-size:11px;color:var(--ink3);">좌석을 입력하면 여기에 표시됩니다</span></div>
 </div>
 </div>
@@ -365,17 +354,20 @@ button{font-family:inherit;}
 
 <script>
 /* ================= SEAT MAP CONFIG (예스24스테이지 1관) ================= */
-// [행, 좌측 블록 끝번호, [중앙 시작, 끝], [우측 시작, 끝], 아래 간격]
-const FLOOR1=[
- ['A',4,[5,15],[16,18]],['B',4,[5,16],[17,19]],['C',4,[5,15],[16,19]],['D',4,[5,16],[17,20]],
- ['E',4,[5,15],[16,19]],['F',4,[5,16],[17,20]],['G',4,[5,15],[16,19]],['H',4,[5,16],[17,20]],
- ['I',4,[5,16],[17,20],true],
- ['J',4,[5,16],[17,19]],['K',4,[5,16],[17,20]],['L',4,[5,16],[17,20]],['M',4,[5,16],[17,19]],['N',4,[5,16],[17,21]]
+// 해몽가와 동일한 예스24스테이지 1관 좌석 데이터
+const SEATS_1F=[
+ {row:'A',L:[1,4],C:[5,15],R:[16,18]},{row:'B',L:[1,4],C:[5,16],R:[17,19]},{row:'C',L:[1,4],C:[5,15],R:[16,19]},
+ {row:'D',L:[1,4],C:[5,16],R:[17,20]},{row:'E',L:[1,4],C:[5,15],R:[16,19]},{row:'F',L:[1,4],C:[5,16],R:[17,20]},
+ {row:'G',L:[1,4],C:[5,15],R:[16,19]},{row:'H',L:[1,4],C:[5,16],R:[17,20]},{row:'I',L:[1,4],C:[5,16],R:[17,20]},
+ {row:'AISLE'},
+ {row:'J',L:[1,4],C:[5,16],R:[17,19]},{row:'K',L:[1,4],C:[5,16],R:[17,20]},{row:'L',L:[1,4],C:[5,16],R:[17,20]},
+ {row:'M',L:[1,4],C:[5,16],R:[17,19]},{row:'N',L:[1,6],C:[7,16],R:[17,21],noGapLC:true},
 ];
-const FLOOR2=[['O',20],['P',21],['Q',16],['R',16],['S',16],['T',18]];
+const SEATS_2F=[{row:'O',n:20,offset:1},{row:'P',n:21,offset:0},{row:'Q',n:16,offset:2},{row:'R',n:16,offset:2},{row:'S',n:16,offset:1},{row:'T',n:18,offset:0}];
+const range=(a,b)=>{const r=[];for(let i=a;i<=b;i++)r.push(i);return r;};
 const VALID=new Set();
-FLOOR1.forEach(([r,l,c,rr])=>{for(let i=1;i<=rr[1];i++)VALID.add(r+'-'+i);});
-FLOOR2.forEach(([r,n])=>{for(let i=1;i<=n;i++)VALID.add(r+'-'+i);});
+SEATS_1F.forEach(r=>{if(r.row==='AISLE')return;[r.L,r.C,r.R].forEach(x=>range(x[0],x[1]).forEach(i=>VALID.add(r.row+'-'+i)));});
+SEATS_2F.forEach(r=>range(1,r.n).forEach(i=>VALID.add(r.row+'-'+i)));
 
 const COLORS=[
   {bg:'#b5485a',label:'1회'},{bg:'#3e6aa8',label:'2회'},{bg:'#d0893a',label:'3회'},{bg:'#6b4c9a',label:'4회'},{bg:'#3d8a5c',label:'5회 이상'},
@@ -473,40 +465,56 @@ function updateCounting(){
 }
 
 /* ================= SEAT MAP RENDER ================= */
-function seatEl(row,n){const s=document.createElement('div');s.className='seat';s.id='S-'+row+'-'+n;s.textContent=n;return s;}
-function blk(cls,row,a,b){const d=document.createElement('div');d.className='blk '+cls;for(let i=a;i<=b;i++)d.appendChild(seatEl(row,i));return d;}
-function rl(t){const d=document.createElement('div');d.className='rl';d.textContent=t;return d;}
 function buildMap(){
   const wrap=document.getElementById('seatMapInner'); wrap.innerHTML='';
-  const stage=document.createElement('div');stage.className='stage-box-mini';stage.textContent='무 대';wrap.appendChild(stage);
-  const sc=document.createElement('div');sc.className='zone-scroll';
-  const inner=document.createElement('div');inner.className='map-inner';
-  const f1=document.createElement('div');f1.className='floor-label';f1.textContent='1층';inner.appendChild(f1);
-  FLOOR1.forEach(([r,l,c,rr,gap])=>{
-    const m=document.createElement('div');m.className='mrow'+(gap?' gap-after':'');
-    m.appendChild(rl(r));m.appendChild(blk('L',r,1,l));m.appendChild(blk('C',r,c[0],c[1]));m.appendChild(blk('R',r,rr[0],rr[1]));m.appendChild(rl(r));
-    inner.appendChild(m);
+  const sec=document.querySelector('.seat-map-section');
+  let availW=sec?sec.clientWidth-32:window.innerWidth-40;
+  const isMobile=window.innerWidth<768;
+  const labelW=isMobile?10:13, gap=1, aisleW=isMobile?12:20, maxSeats=21;
+  const MAX_SZ=isMobile?11:15;
+  let sz=Math.max(7,Math.floor((availW-labelW*2-aisleW*2-gap*(maxSeats+2))/maxSeats));
+  if(sz>MAX_SZ){sz=MAX_SZ;availW=labelW*2+aisleW*2+gap*(maxSeats+2)+sz*maxSeats;}
+  wrap.style.width=availW+'px';wrap.style.margin='0 auto';
+  const stg=document.querySelector('.stage-box-mini'); if(stg){stg.style.width=availW+'px';stg.style.margin='0 auto 6px';}
+  const fs=Math.max(4,Math.floor(sz*0.44)), step=sz+gap;
+  const mkSeat=(row,n,s,f)=>{const el=document.createElement('div');el.className='seat';el.id='S-'+row+'-'+n;
+    el.style.cssText=`width:${s}px;height:${s}px;font-size:${f}px;flex-shrink:0;margin:0 ${gap/2}px;`;el.textContent=n;return el;};
+  const mkBlk=(row,nums,s,f)=>{const b=document.createElement('div');b.style.cssText='display:flex;flex-shrink:0;';nums.forEach(n=>b.appendChild(mkSeat(row,n,s,f)));return b;};
+  const mkLbl=t=>{const l=document.createElement('div');l.className='row-label';
+    l.style.cssText=`width:${labelW}px;min-width:${labelW}px;font-size:${isMobile?6:8}px;`;l.textContent=t;return l;};
+  const mkSp=w=>{const d=document.createElement('div');d.style.cssText=`flex-shrink:0;width:${Math.max(0,w)}px;`;return d;};
+  const mkRow=()=>{const r=document.createElement('div');r.style.cssText=`display:flex;align-items:center;margin-bottom:${gap}px;width:100%;`;return r;};
+  const mkInner=()=>{const i=document.createElement('div');i.style.cssText='display:flex;align-items:center;flex:1;min-width:0;';return i;};
+
+  const fl1=document.createElement('div');fl1.className='floor-label';fl1.textContent='1층';wrap.appendChild(fl1);
+  const innerW=availW-labelW*2;
+  SEATS_1F.forEach(r=>{
+    if(r.row==='AISLE'){const sp=document.createElement('div');sp.style.height=(isMobile?6:10)+'px';wrap.appendChild(sp);return;}
+    const L=range(...r.L),C=range(...r.C),R=range(...r.R);
+    const lW=L.length*step,cW=C.length*step,rW=R.length*step;
+    const rowEl=mkRow(); rowEl.appendChild(mkLbl(r.row)); const inner=mkInner();
+    if(r.noGapLC){
+      inner.appendChild(mkBlk(r.row,L,sz,fs));inner.appendChild(mkBlk(r.row,C,sz,fs));
+      inner.appendChild(mkSp(Math.max(aisleW,innerW-lW-cW-rW)));inner.appendChild(mkBlk(r.row,R,sz,fs));
+    }else{
+      const aisle=Math.max(aisleW,Math.floor((innerW-lW-cW-rW)/2));
+      inner.appendChild(mkBlk(r.row,L,sz,fs));inner.appendChild(mkSp(aisle));
+      inner.appendChild(mkBlk(r.row,C,sz,fs));inner.appendChild(mkSp(aisle));inner.appendChild(mkBlk(r.row,R,sz,fs));
+    }
+    rowEl.appendChild(inner);rowEl.appendChild(mkLbl(r.row));wrap.appendChild(rowEl);
   });
-  const dv=document.createElement('div');dv.className='floor-div';inner.appendChild(dv);
-  const f2=document.createElement('div');f2.className='floor-label';f2.textContent='2층';inner.appendChild(f2);
-  FLOOR2.forEach(([r,n])=>{
-    const m=document.createElement('div');m.className='mrow';
-    m.appendChild(rl(r));m.appendChild(blk('F2',r,1,n));m.appendChild(rl(r));inner.appendChild(m);
+
+  const hr=document.createElement('hr');hr.className='floor-divider';wrap.appendChild(hr);
+  const fl2=document.createElement('div');fl2.className='floor-label';fl2.textContent='2층';wrap.appendChild(fl2);
+  const sz2=Math.min(sz,Math.max(7,Math.floor((innerW-gap*21)/21))),fs2=Math.max(4,Math.floor(sz2*0.44)),step2=sz2+gap;
+  SEATS_2F.forEach(r=>{
+    const rowEl=mkRow();rowEl.appendChild(mkLbl(r.row));const inner=mkInner();
+    inner.appendChild(mkSp((r.offset||0)*step2));inner.appendChild(mkBlk(r.row,range(1,r.n),sz2,fs2));
+    rowEl.appendChild(inner);rowEl.appendChild(mkLbl(r.row));wrap.appendChild(rowEl);
   });
-  sc.appendChild(inner);wrap.appendChild(sc);fitSeatMap();
 }
-function fitSeatMap(){
-  const section=document.querySelector('.seat-map-section'),sc=document.querySelector('.zone-scroll'),inner=document.querySelector('.map-inner');
-  if(!section||!sc||!inner)return;
-  inner.style.transform='none';sc.style.height='';
-  const cs=getComputedStyle(section);
-  const avail=section.clientWidth-(parseFloat(cs.paddingLeft)||0)-(parseFloat(cs.paddingRight)||0);
-  const w=inner.scrollWidth,h=inner.scrollHeight;
-  if(w>avail&&w>0){const s=avail/w;inner.style.transformOrigin='top center';inner.style.transform='scale('+s+')';sc.style.height=Math.ceil(h*s)+'px';}
-}
-window.addEventListener('resize',fitSeatMap);
-window.addEventListener('load',fitSeatMap);
-if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fitSeatMap).catch(()=>{});}
+let _rsz=null;
+window.addEventListener('resize',()=>{clearTimeout(_rsz);_rsz=setTimeout(()=>{buildMap();updateMap();},120);});
 
 function updateMap(){
   document.querySelectorAll('.seat').forEach(el=>{el.className='seat';el.removeAttribute('title');});
