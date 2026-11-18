@@ -180,11 +180,11 @@ button{font-family:inherit;}
 .row-label{font-weight:700;color:var(--gold);flex-shrink:0;text-align:center;}
 .seat{border-radius:2px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;
   background:#efe4cc;color:#8a7a60;border:1px solid #d8c8a6;}
-.seat.mk1{background:#b5485a!important;color:#fff!important;border-color:#8a2f40!important;}
-.seat.mk2{background:#3e6aa8!important;color:#fff!important;border-color:#284c80!important;}
-.seat.mk3{background:#d0893a!important;color:#fff!important;border-color:#a0661e!important;}
-.seat.mk4{background:#6b4c9a!important;color:#fff!important;border-color:#4b3274!important;}
-.seat.mk5{background:#3d8a5c!important;color:#fff!important;border-color:#25643e!important;}
+.seat.mk1{background:#d6b04e!important;color:#fff!important;border-color:#a8823e!important;}
+.seat.mk2{background:#c47a38!important;color:#fff!important;border-color:#8f5420!important;}
+.seat.mk3{background:#8f4636!important;color:#fff!important;border-color:#652c20!important;}
+.seat.mk4{background:#6e3a5c!important;color:#fff!important;border-color:#4c2440!important;}
+.seat.mk5{background:#352540!important;color:#fff!important;border-color:#1f1428!important;}
 .seat-legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px;font-size:11px;}
 .seat-legend-item{display:flex;align-items:center;gap:4px;color:var(--ink2);}
 .seat-legend-dot{width:11px;height:11px;border-radius:2px;display:inline-block;}
@@ -419,7 +419,7 @@ SEATS_1F.forEach(r=>{if(r.row==='AISLE')return;[r.L,r.C,r.R].forEach(x=>range(x[
 SEATS_2F.forEach(r=>range(1,r.n).forEach(i=>VALID.add(r.row+'-'+i)));
 
 const COLORS=[
-  {bg:'#b5485a',label:'1회'},{bg:'#3e6aa8',label:'2회'},{bg:'#d0893a',label:'3회'},{bg:'#6b4c9a',label:'4회'},{bg:'#3d8a5c',label:'5회 이상'},
+  {bg:'#d6b04e',label:'1회'},{bg:'#c47a38',label:'2회'},{bg:'#8f4636',label:'3회'},{bg:'#6e3a5c',label:'4회'},{bg:'#352540',label:'5회 이상'},
 ];
 const STORE_SEATS='narzissgoldmund_seats_v1', STORE_PIN='narzissgoldmund_pin_v1';
 function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
