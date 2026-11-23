@@ -141,9 +141,6 @@ button{font-family:inherit;}
 .pc-count span:first-child{font-size:25px;}
 .count-card.goldm .pc-count{color:#8a5a2a;}
 .pc-count .cnt-total-of{font-size:15px;font-weight:600;opacity:0.75;}
-.count-card.zero .pc-frame{filter:grayscale(80%) brightness(1.05);opacity:0.45;}
-.count-card.zero .pc-count{opacity:0.4;}
-.count-card.dim{opacity:0.22;}
 .cnt-total-of{margin-left:1px;}
 /* seat map in poster */
 .ps-map{margin:22px auto 0;max-width:520px;}
@@ -440,6 +437,8 @@ document.querySelectorAll('.row[data-sid]').forEach(r=>{
   const info={}; ROLE_ATTRS.forEach(a=>{info[a]=r.dataset[a];}); SHOW_INFO[r.dataset.sid]=info;
 });
 function matchSel(info){ return ROLE_ATTRS.every(a=>!sel[a].length||sel[a].includes(info[a])); }
+// 정산용: 같은 역에서 1명만 선택했을 때만 그 배우로 좁힘 (2명 이상 = 전체와 동일)
+function matchEff(info){ return ROLE_ATTRS.every(a=>sel[a].length!==1||sel[a][0]===info[a]); }
 
 /* ================= MODALS ================= */
 function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
@@ -495,29 +494,24 @@ function saveSeats(){lsSet(STORE_SEATS,JSON.stringify(showSeats));}
 /* ================= COUNTING ================= */
 function updateCounting(){
   const cnt={},tot={}; ALL_KEYS.forEach(k=>{cnt[k]=0;tot[k]=0;});
-  let total=0,totTotal=0; const isAll=isAllEmpty(sel);
+  let total=0,totTotal=0;
   Object.keys(SHOW_INFO).forEach(sid=>{
-    const info=SHOW_INFO[sid]; if(!isAll&&!matchSel(info))return;
-    ROLE_ATTRS.forEach(a=>{tot[info[a]]++;}); totTotal++;
-  });
-  Object.keys(showSeats).forEach(sid=>{
-    if(!(showSeats[sid]||[]).length||!SHOW_INFO[sid])return;
-    const info=SHOW_INFO[sid]; if(!isAll&&!matchSel(info))return;
-    ROLE_ATTRS.forEach(a=>{cnt[info[a]]++;}); total++;
+    const info=SHOW_INFO[sid]; const seen=(showSeats[sid]||[]).length>0;
+    ROLE_ATTRS.forEach(a=>{tot[info[a]]++; if(seen)cnt[info[a]]++;});   // 배우별: 내가 본 횟수 / 그 배우 총 출연 횟수
+    if(matchEff(info)){totTotal++; if(seen)total++;}
   });
   ALL_KEYS.forEach(k=>{
     document.getElementById('cnt-'+k).textContent=cnt[k];
-    document.getElementById('cnt-'+k).closest('.count-card').classList.toggle('zero',!cnt[k]);
     document.getElementById('tot-'+k).textContent='/'+tot[k];
   });
-  renderPairs(isAll);
+  renderPairs();
   document.getElementById('cnt-total').textContent=total;
   document.getElementById('tot-total').textContent='/'+totTotal;
 }
 
-function renderPairs(isAll){
+function renderPairs(){
   const P={};
-  Object.keys(SHOW_INFO).forEach(sid=>{const i=SHOW_INFO[sid]; if(!isAll&&!matchSel(i))return;
+  Object.keys(SHOW_INFO).forEach(sid=>{const i=SHOW_INFO[sid]; if(!matchEff(i))return;
     const k=i.nar+'|'+i.gold; P[k]=P[k]||{n:i.nar,g:i.gold,t:0,c:0}; P[k].t++; if((showSeats[sid]||[]).length)P[k].c++;});
   const ord=k=>ROLE_KEYS.nar.indexOf(k.split('|')[0])*100+ROLE_KEYS.gold.indexOf(k.split('|')[1]);
   const keys=Object.keys(P).filter(k=>P[k].c>0).sort((a,b)=>ord(a)-ord(b));
@@ -579,10 +573,10 @@ window.addEventListener('resize',()=>{clearTimeout(_rsz);_rsz=setTimeout(()=>{bu
 
 function updateMap(){
   document.querySelectorAll('.seat').forEach(el=>{el.className='seat';el.removeAttribute('title');});
-  const cnt={}; const isAll=isAllEmpty(sel);
+  const cnt={};
   Object.keys(showSeats).forEach(sid=>{
     if(!(showSeats[sid]||[]).length||!SHOW_INFO[sid])return;
-    if(!isAll&&!matchSel(SHOW_INFO[sid]))return;
+    if(!matchEff(SHOW_INFO[sid]))return;
     showSeats[sid].forEach(s=>{cnt[s]=(cnt[s]||0)+1;});
   });
   Object.keys(cnt).forEach(k=>{const el=document.getElementById('S-'+k);if(el){el.classList.add('mk'+Math.min(cnt[k],5));el.title=k+' ('+cnt[k]+'회)';}});
@@ -677,7 +671,7 @@ function applyFilter(){
   updateCounting();
   ROLE_ATTRS.forEach(a=>ROLE_KEYS[a].forEach(k=>{
     const card=document.getElementById('cnt-'+k).closest('.count-card');
-    card.classList.toggle('dim',sel[a].length>0&&!sel[a].includes(k));
+    card.style.display=(sel[a].length===1&&sel[a][0]!==k)?'none':'';
   }));
   updateMap(); renderPinBar();
 }
